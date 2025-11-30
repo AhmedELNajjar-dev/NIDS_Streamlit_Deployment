@@ -359,7 +359,7 @@ def send_benign_traffic():
         status = 'Malicious' if is_malicious(prediction) else 'Safe'
 
         src_ip = row.get('Source IP')  # No fallback
-        dst_port = int(flow.get('Destination Port', 80))
+        dst_port = int(flow.get('Destination Port'))
 
         add_traffic_entry(dst_port, prediction, status, row=row)
         return True
