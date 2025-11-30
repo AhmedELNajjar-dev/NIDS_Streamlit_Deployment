@@ -1,0 +1,10 @@
+streamlit
+pandas
+scapy
+cicflowmeter
+matplotlib
+seaborn
+joblib
+requests
+plotly
+scikit-learn
