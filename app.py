@@ -36,25 +36,14 @@ st.markdown("""
         background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
     }
 
-    /* Target the Metric VALUE (The numbers) */
-    [data-testid="stMetricValue"] {
-        font-size: 2.5rem !important;
+    div[data-testid="stMetricValue"] {
+        font-size: 3rem;
         font-weight: bold;
     }
 
-    /* Target the Metric LABEL (The text above numbers) */
-    /* CHANGE: Removed 'div' to match any tag (label, div, etc.) */
-    [data-testid="stMetricLabel"] {
-        font-size: 1.5rem !important;
+    div[data-testid="stMetricLabel"] {
+        font-size: 1.5rem;
         font-weight: bold;
-   
-    }
-
-    /* ADDED: Explicitly target paragraph tags inside the label if Streamlit nests them */
-    [data-testid="stMetricLabel"] p {
-        font-size: 1.5rem !important;
-        font-weight: bold;
-
     }
 
     .metric-card {
@@ -118,9 +107,73 @@ st.markdown("""
         border-left: 4px solid #00ff41;
     }
 
+    .footer-text {
+        color: #00ff41;  /* Green in dark mode */
+        opacity: 0.7;
+        text-align: center;
+    }
+
     @keyframes pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.7; }
+    }
+
+    /* Light Mode Adjustments */
+    @media (prefers-color-scheme: light) {
+        .main {
+            color: #000000;
+        }
+
+        .stApp {
+            background: white;
+        }
+
+        .metric-card {
+            background: #f0f0f0;
+            border: 1px solid #cccccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .safe-metric {
+            color: #006400 !important;
+        }
+
+        .threat-metric {
+            color: #8b0000 !important;
+        }
+
+        h1, h2, h3 {
+            color: #000000;
+            text-shadow: none;
+        }
+
+        .dataframe {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
+        .alert-box {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .alert-danger {
+            background-color: rgba(139, 0, 0, 0.1);
+            border-left: 4px solid #8b0000;
+        }
+
+        .alert-success {
+            background-color: rgba(0, 100, 0, 0.1);
+            border-left: 4px solid #006400;
+        }
+
+        div[data-testid="stMetricValue"], div[data-testid="stMetricLabel"] {
+            color: #000000 !important;
+        }
+
+        .footer-text {
+            color: #0000ff !important;  /* Blue in light mode */
+            opacity: 1;  /* Full opacity for better readability */
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -709,11 +762,10 @@ with col_right:
 # Footer
 st.markdown("---")
 st.markdown("""
-<div style='text-align: center; color: #00ff41; opacity: 0.7;'>
+<div class='footer-text'>
     🛡️ NIDS Dashboard | Blue Team Defense System | Real-Time Threat Detection
 </div>
 """, unsafe_allow_html=True)
-
 # Auto-refresh every 2 seconds when there's activity
 if st.session_state.total_flows > 0:
     time.sleep(2)
