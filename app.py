@@ -10,7 +10,7 @@ from datetime import datetime
 import threading
 import time
 import joblib
-from scapy.all import IP, TCP, send, sr1
+# from scapy.all import IP, TCP, send, sr1 # Scapy often causes issues in some envs, removing if not strictly used for logic
 import socket
 from collections import deque
 import plotly.graph_objects as go
@@ -36,8 +36,9 @@ st.markdown("""
         background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
     }
 
-    div[data-testid="stMetricValue"] {
-        font-size: 2rem;
+    /* Target the Metric VALUE (The numbers) */
+    [data-testid="stMetricValue"] {
+        font-size: 2.5rem !important;
         font-weight: bold;
     }
 
