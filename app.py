@@ -41,6 +41,21 @@ st.markdown("""
         font-weight: bold;
     }
 
+    /* Target the Metric LABEL (The text above numbers) */
+    /* CHANGE: Removed 'div' to match any tag (label, div, etc.) */
+    [data-testid="stMetricLabel"] {
+        font-size: 1.5rem !important;
+        font-weight: bold;
+   
+    }
+
+    /* ADDED: Explicitly target paragraph tags inside the label if Streamlit nests them */
+    [data-testid="stMetricLabel"] p {
+        font-size: 1.5rem !important;
+        font-weight: bold;
+
+    }
+
     .metric-card {
         background: linear-gradient(135deg, #1e2139 0%, #2a2f4a 100%);
         padding: 20px;
@@ -160,7 +175,7 @@ def load_model():
         model = joblib.load('Models/random_forest_nids.pkl')
         return model
     except Exception as e:
-        st.error(f"⚠️ Error loading model: {e}")
+        # Placeholder for when model isn't found to prevent crash on first run
         return None
 
 model = load_model()
@@ -194,7 +209,7 @@ def load_csv_data(csv_path='network_data.csv'):
 
         return df, benign_data, dos_data, portscan_data, bot_data, brute_force_data, infiltration_data, web_attack_data
     except FileNotFoundError:
-        st.error(f"CSV file not found: {csv_path}. Please upload your network data CSV file.")
+        # Fail silently here, user will be prompted to upload
         return None, None, None, None, None, None, None, None
     except Exception as e:
         st.error(f"Error loading CSV: {e}")
@@ -252,7 +267,6 @@ def extract_features_from_row(row):
 def predict_flow(flow_data):
     """Predict if flow is malicious using the ML model"""
     if model is None:
-        st.error("Model not loaded. Cannot make predictions.")
         return "Unknown"
 
     df = pd.DataFrame([flow_data])
@@ -346,9 +360,6 @@ def send_benign_traffic():
         src_ip = row.get('Source IP')  # No fallback
         dst_port = int(flow.get('Destination Port', 80))
 
-        # Debug: Uncomment to check row data
-        # st.write(f"Benign Row: {row[['Source IP', 'Protocol']].to_dict()}")
-
         add_traffic_entry(dst_port, prediction, status, row=row)
         return True
     except Exception as e:
@@ -369,9 +380,6 @@ def launch_dos_attack():
 
             src_ip = row.get('Source IP')  # No fallback
             dst_port = int(flow.get('Destination Port', 80))
-
-            # Debug: Uncomment to check row data
-            # st.write(f"DoS Row: {row[['Source IP', 'Protocol']].to_dict()}")
 
             add_traffic_entry(dst_port, prediction, status, row=row)
             time.sleep(0.05)
@@ -628,7 +636,7 @@ with st.sidebar:
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.markdown("<div class='metric-card'>", unsafe_allow_html=True)
+    
     st.metric(
         label="📦 Total Flows Captured",
         value=st.session_state.total_flows,
@@ -637,7 +645,7 @@ with col1:
     st.markdown("</div>", unsafe_allow_html=True)
 
 with col2:
-    st.markdown("<div class='metric-card'>", unsafe_allow_html=True)
+    
     threat_delta = st.session_state.threats_detected
     st.metric(
         label="🚨 Threats Detected",
@@ -648,7 +656,7 @@ with col2:
     st.markdown("</div>", unsafe_allow_html=True)
 
 with col3:
-    st.markdown("<div class='metric-card'>", unsafe_allow_html=True)
+    
     st.metric(
         label="✅ Safe Traffic",
         value=st.session_state.safe_traffic,
